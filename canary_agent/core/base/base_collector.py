@@ -7,14 +7,6 @@ class BaseCollector():
     """
     Abstract class for Collector
     """
-    def __init__(self):
-        self._raw_data: Optional[Dict] = None
-
-    @property
-    def get_raw_data(self) -> Optional[Dict]:
-        """Return raw data (Dict)"""
-        return self._raw_data
-
     def to_prompt(
         self,
         data: Dict,
