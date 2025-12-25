@@ -2,7 +2,7 @@ import yfinance as yf
 import pandas as pd
 
 from __future__ import annotations
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Union
 from pydantic import BaseModel, Field, ConfigDict
 
 from canary_agent.core.base import BaseCollector
@@ -55,9 +55,12 @@ class OHLCVCollector(BaseCollector):
     def support_interval(self) -> List[str]:
         return self._support_interval
 
-    def latest(self) -> Dict:
+    def latest(self, return_dict: bool = True) -> Union[OHLCVOutput, Dict]:
         """
         Methods for collecting the latest OHLCV data.
+
+        Args:
+            return_dict (bool): if return_dict return Dict (default=True)
         
         Returns:
             output (Dict): Latest OHLCV data.
@@ -79,15 +82,17 @@ class OHLCVCollector(BaseCollector):
             type="latest",
             data=latest_df,
         )
-
-        return output.to_dict()
+        if return_dict:
+            return output.to_dict()
+        return output
     
     def between(
         self,
         start: str,
         end: str,
         interval: str = "1d",
-    ) -> Dict:
+        return_dict: bool = True,
+    ) ->  Union[OHLCVOutput, Dict]:
         """
         Method to collect OHLCV data between start and end.
         
@@ -95,6 +100,7 @@ class OHLCVCollector(BaseCollector):
             start (str): start time
             end (str): end time
             interval (str, optional): interval (defaults="1d")
+            return_dict (bool): if return_dict return Dict (default=True)
 
         Returns:
             output (Dict): OHLCV data between start and end.
@@ -120,5 +126,6 @@ class OHLCVCollector(BaseCollector):
             end=end,
             interval=interval,
         )
-
-        return output.to_dict()
+        if return_dict:
+            return output.to_dict()
+        return output
