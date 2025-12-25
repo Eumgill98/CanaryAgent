@@ -7,11 +7,12 @@ authors = [
 ]
 license = {text = "MIT License"}
 readme = "README.md"
-requires-python = ">=3.11,<4.0.0"
+requires-python = ">=3.11,<3.14"
 dependencies = [
     "langchain (>=1.2.0,<2.0.0)",
     "yfinance (>=1.0,<2.0)",
-    "pydantic (>=2.12.5,<3.0.0)"
+    "pydantic (>=2.12.5,<3.0.0)",
+    "pandas-ta-openbb (>=0.4.22,<0.5.0)"
 ]
 
 

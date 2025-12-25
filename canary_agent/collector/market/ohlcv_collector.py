@@ -1,7 +1,8 @@
+from __future__ import annotations
+
 import yfinance as yf
 import pandas as pd
 
-from __future__ import annotations
 from typing import Dict, List, Optional, Union
 from pydantic import BaseModel, Field, ConfigDict
 
