@@ -56,16 +56,16 @@ class OHLCVCollector(BaseCollector):
         if df.empty:
             raise ValueError(f"No OHLCV data for ticker: {self._ticker}")
 
+        df.index.name = "date"
         latest_df = df.tail(1).reset_index()
 
         output = OHLCVOutput(
             ticker=self.ticker,
             type="latest",
-            data=latest_df,
+            data=latest_df.to_dict(orient="records"),
         )
-        if return_dict:
-            return output.to_dict()
-        return output
+
+        return output.to_dict() if return_dict else output
     
     def between(
         self,
@@ -97,16 +97,16 @@ class OHLCVCollector(BaseCollector):
         if df.empty:
             raise ValueError(f"No OHLCV data for ticker: {self._ticker}")
         
+        df.index.name = "date"
         df = df.reset_index()
 
         output = OHLCVOutput(
             ticker=self.ticker,
             type="between",
-            data=df,
+            data=df.to_dict(orient="records"),
             start=start,
             end=end,
             interval=interval,
         )
-        if return_dict:
-            return output.to_dict()
-        return output
+        
+        return output.to_dict() if return_dict else output

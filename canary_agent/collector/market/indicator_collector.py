@@ -99,15 +99,13 @@ class IndicatorCollector(BaseCollector):
 
         output = IndicatorOutput(
             ticker=ticker,
-            data=out,
+            data=out.to_dict(orient="records"),
             start=start,
             end=end,
             interval=interval,
         )
 
-        if return_dict:
-            return output.to_dict()
-        return output
+        return output.to_dict() if return_dict else output
 
     @staticmethod
     def momentum(
@@ -150,15 +148,13 @@ class IndicatorCollector(BaseCollector):
 
         output = IndicatorOutput(
             ticker=ticker,
-            data=out,
+            data=out.to_dict(orient="records"),
             start=start,
             end=end,
             interval=interval,
         )
 
-        if return_dict:
-            return output.to_dict()
-        return output
+        return output.to_dict() if return_dict else output
 
     @staticmethod
     def volatility(
@@ -198,15 +194,13 @@ class IndicatorCollector(BaseCollector):
 
         output = IndicatorOutput(
             ticker=ticker,
-            data=out,
+            data=out.to_dict(orient="records"),
             start=start,
             end=end,
             interval=interval,
         )
 
-        if return_dict:
-            return output.to_dict()
-        return output
+        return output.to_dict() if return_dict else output
 
     @staticmethod
     def volume(
@@ -245,12 +239,10 @@ class IndicatorCollector(BaseCollector):
 
         output = IndicatorOutput(
             ticker=ticker,
-            data=out,
+            data=out.to_dict(orient="records"),
             start=start,
             end=end,
             interval=interval,
         )
 
-        if return_dict:
-            return output.to_dict()
-        return output
+        return output.to_dict() if return_dict else output
