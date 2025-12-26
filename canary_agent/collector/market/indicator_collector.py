@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import pandas as pd
 import pandas_ta as ta
 from typing import Dict, List, Optional, Union
