@@ -2,10 +2,10 @@ from __future__ import annotations
 
 import pandas as pd
 import pandas_ta as ta
-from typing import List
+from typing import Dict, List, Optional, Union
 
 from canary_agent.core.base import BaseCollector
-
+from canary_agent.collector.market.output import IndicatorOutput
 
 class InsufficientDataError(ValueError):
     """Raised when there is not enough data to compute technical indicators."""
@@ -64,10 +64,15 @@ class IndicatorCollector(BaseCollector):
 
     @staticmethod
     def trend(
+        ticker: str,
         df: pd.DataFrame,
         sma: List[int] = [20, 60],
         ema: List[int] = [12, 26],
-    ) -> pd.DataFrame:
+        start: Optional[str] = None,
+        end: Optional[str] = None,
+        interval: Optional[str] = None,
+        return_dict: bool = True,
+    ) -> Union[IndicatorOutput, Dict]:
         """
         Compute trend indicators such as SMA and EMA.
 
@@ -77,7 +82,7 @@ class IndicatorCollector(BaseCollector):
             ema (List[int]): Window sizes for Exponential Moving Averages
 
         Returns:
-            pd.DataFrame: DataFrame with trend indicators appended
+            output (Dict, IndicatorOutput): trend indicators data.
         """
         out = IndicatorCollector._normalize_columns(df.copy())
 
@@ -94,14 +99,29 @@ class IndicatorCollector(BaseCollector):
         for w in ema:
             out.ta.ema(length=w, append=True)
 
-        return out
+        output = IndicatorOutput(
+            ticker=ticker,
+            data=out,
+            start=start,
+            end=end,
+            interval=interval,
+        )
+
+        if return_dict:
+            return output.to_dict()
+        return output
 
     @staticmethod
     def momentum(
+        ticker: str,
         df: pd.DataFrame,
         rsi: int = 14,
         macd: bool = True,
-    ) -> pd.DataFrame:
+        start: Optional[str] = None,
+        end: Optional[str] = None,
+        interval: Optional[str] = None,
+        return_dict: bool = True,
+    ) -> Union[Dict, IndicatorOutput]:
         """
         Compute momentum indicators such as RSI and MACD.
 
@@ -111,7 +131,7 @@ class IndicatorCollector(BaseCollector):
             macd (bool): Whether to compute MACD
 
         Returns:
-            pd.DataFrame: DataFrame with momentum indicators appended
+            output (Dict, IndicatorOutput): momentum indicators data.
         """
         out = IndicatorCollector._normalize_columns(df.copy())
 
@@ -130,15 +150,30 @@ class IndicatorCollector(BaseCollector):
         if macd:
             out.ta.macd(append=True)
 
-        return out
+        output = IndicatorOutput(
+            ticker=ticker,
+            data=out,
+            start=start,
+            end=end,
+            interval=interval,
+        )
+
+        if return_dict:
+            return output.to_dict()
+        return output
 
     @staticmethod
     def volatility(
+        ticker: str,
         df: pd.DataFrame,
         bb_window: int = 20,
         bb_std: float = 2.0,
         atr: int = 14,
-    ) -> pd.DataFrame:
+        start: Optional[str] = None,
+        end: Optional[str] = None,
+        interval: Optional[str] = None,
+        return_dict: bool = True,
+    ) -> Union[Dict, IndicatorOutput]:
         """
         Compute volatility indicators such as Bollinger Bands and ATR.
 
@@ -149,7 +184,7 @@ class IndicatorCollector(BaseCollector):
             atr (int): ATR lookback period
 
         Returns:
-            pd.DataFrame: DataFrame with volatility indicators appended
+            output (Dict, IndicatorOutput): volatility indicators data.
         """
         out = IndicatorCollector._normalize_columns(df.copy())
 
@@ -163,14 +198,29 @@ class IndicatorCollector(BaseCollector):
         out.ta.bbands(length=bb_window, std=bb_std, append=True)
         out.ta.atr(length=atr, append=True)
 
-        return out
+        output = IndicatorOutput(
+            ticker=ticker,
+            data=out,
+            start=start,
+            end=end,
+            interval=interval,
+        )
+
+        if return_dict:
+            return output.to_dict()
+        return output
 
     @staticmethod
     def volume(
+        ticker: str,
         df: pd.DataFrame,
         obv: bool = True,
         vma: int = 20,
-    ) -> pd.DataFrame:
+        start: Optional[str] = None,
+        end: Optional[str] = None,
+        interval: Optional[str] = None,
+        return_dict: bool = True,
+    ) -> Union[Dict, IndicatorOutput]:
         """
         Compute volume-based indicators such as OBV and Volume Moving Average.
 
@@ -180,7 +230,7 @@ class IndicatorCollector(BaseCollector):
             vma (int): Volume moving average window size
 
         Returns:
-            pd.DataFrame: DataFrame with volume indicators appended
+            output (Dict, IndicatorOutput): volume indicators data.
         """
         out = IndicatorCollector._normalize_columns(df.copy())
 
@@ -195,4 +245,14 @@ class IndicatorCollector(BaseCollector):
 
         out.ta.sma(close="volume", length=vma, append=True)
 
-        return out
+        output = IndicatorOutput(
+            ticker=ticker,
+            data=out,
+            start=start,
+            end=end,
+            interval=interval,
+        )
+
+        if return_dict:
+            return output.to_dict()
+        return output

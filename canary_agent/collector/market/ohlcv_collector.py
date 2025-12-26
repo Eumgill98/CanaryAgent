@@ -1,29 +1,11 @@
 from __future__ import annotations
 
 import yfinance as yf
-import pandas as pd
 
-from typing import Dict, List, Optional, Union
-from pydantic import BaseModel, Field, ConfigDict
+from typing import Dict, List, Union
 
 from canary_agent.core.base import BaseCollector
-
-class OHLCVOutput(BaseModel):
-    ticker: str = Field(...)
-    type: str = Field(...)
-    data: pd.DataFrame = Field(...)
-
-    # time setting
-    start: Optional[str] = Field(default=None)
-    end: Optional[str] = Field(default=None)
-    interval: Optional[str] = Field(default=None)
-
-    model_config = ConfigDict(arbitrary_types_allowed=True)
-
-    def to_dict(self) -> Dict:
-        d = self.model_dump(exclude={"data"})
-        d["data"] = self.data.to_dict(orient="records")
-        return d
+from canary_agent.collector.market.output import OHLCVOutput
 
 class OHLCVCollector(BaseCollector):
     """A collector that returns Open, High, Low, and Close corresponding to the ticker"""
@@ -64,7 +46,7 @@ class OHLCVCollector(BaseCollector):
             return_dict (bool): if return_dict return Dict (default=True)
         
         Returns:
-            output (Dict): Latest OHLCV data.
+            output (Dict, OHLCVOutput): Latest OHLCV data.
         """
         df = yf.download(
             self.ticker,
@@ -104,7 +86,7 @@ class OHLCVCollector(BaseCollector):
             return_dict (bool): if return_dict return Dict (default=True)
 
         Returns:
-            output (Dict): OHLCV data between start and end.
+            output (Dict, OHLCVOutput): OHLCV data between start and end.
         """
         df = yf.download(
             self.ticker,
