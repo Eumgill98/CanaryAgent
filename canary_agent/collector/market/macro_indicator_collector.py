@@ -1,5 +1,5 @@
 from fredapi import Fred
-from typing import Tuple, Dict, Union, List, Any
+from typing import Tuple, Dict, Union, Optional, Any
 
 import os
 
@@ -65,9 +65,43 @@ class USMacroIndicatorCollector(BaseCollector):
         )
         
         out = df.iloc[-1]
-        output = MacroIndicatorOutput(ticker=key, data=out.to_dict())
+        output = MacroIndicatorOutput(ticker=key, type='latest', data=out.to_dict())
         return output.to_dict() if return_dict else output
     
+    def between(
+        self,
+        key: str = 'gdp',
+        start: Optional[str] = None,
+        end: Optional[str] = None,
+        return_dict: bool = False,
+    ) -> Union[Dict[str, Any], MacroIndicatorOutput]:
+
+        key = key.lower()
+        if not self.can_search(key):
+            raise ValueError(f"{key} is not valid type.")
+        
+        series_id = self.INDICATORS[key]
+
+        series = self.fred.get_series(
+            series_id=series_id,
+            observation_start=start,
+            observation_end=end,
+        )
+
+        if series.empty:
+            error_data = {"error": "empty"}
+            return error_data if return_dict else MacroIndicatorOutput(self.ticker, type='between', data=error_data, start=start, end=end)
+
+        df = (
+            series
+            .dropna()
+            .to_frame(name=key)
+            .reset_index()
+            .rename(columns={"index": "date"})
+        )
+        output = MacroIndicatorOutput(ticker=key, data=df.to_dict(orient="records"), type='between', start=start, end=end)
+        return output.to_dict() if return_dict else output
+        
 
 # class KRMacroIndicatorCollector(BaseCollector):
 #     """

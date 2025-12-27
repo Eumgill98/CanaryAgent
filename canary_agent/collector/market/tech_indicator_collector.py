@@ -3,7 +3,7 @@ import pandas_ta as ta
 from typing import Dict, List, Optional, Union, Any
 
 from canary_agent.core.base import BaseCollector
-from canary_agent.collector.market.output import IndicatorOutput
+from canary_agent.collector.market.output import TechIndicatorOutput
 
 class InsufficientDataError(ValueError):
     """Raised when there is not enough data to compute technical indicators."""
@@ -70,7 +70,7 @@ class TechIndicatorCollector(BaseCollector):
         end: Optional[str] = None,
         interval: Optional[str] = None,
         return_dict: bool = False,
-    ) -> Union[IndicatorOutput, Dict[str, Any]]:
+    ) -> Union[TechIndicatorOutput, Dict[str, Any]]:
         """
         Compute trend indicators such as SMA and EMA.
 
@@ -80,7 +80,7 @@ class TechIndicatorCollector(BaseCollector):
             ema (List[int]): Window sizes for Exponential Moving Averages
 
         Returns:
-            output (Dict, IndicatorOutput): trend indicators data.
+            output (Dict, TechIndicatorOutput): trend indicators data.
         """
         out = TechIndicatorCollector._normalize_columns(df.copy())
 
@@ -97,9 +97,10 @@ class TechIndicatorCollector(BaseCollector):
         for w in ema:
             out.ta.ema(length=w, append=True)
 
-        output = IndicatorOutput(
+        output = TechIndicatorOutput(
             ticker=ticker,
             data=out.to_dict(orient="records"),
+            type='trend',
             start=start,
             end=end,
             interval=interval,
@@ -117,7 +118,7 @@ class TechIndicatorCollector(BaseCollector):
         end: Optional[str] = None,
         interval: Optional[str] = None,
         return_dict: bool = False,
-    ) -> Union[IndicatorOutput, Dict[str, Any]]:
+    ) -> Union[TechIndicatorOutput, Dict[str, Any]]:
         """
         Compute momentum indicators such as RSI and MACD.
 
@@ -127,7 +128,7 @@ class TechIndicatorCollector(BaseCollector):
             macd (bool): Whether to compute MACD
 
         Returns:
-            output (Dict, IndicatorOutput): momentum indicators data.
+            output (Dict, TechIndicatorOutput): momentum indicators data.
         """
         out = TechIndicatorCollector._normalize_columns(df.copy())
 
@@ -146,9 +147,10 @@ class TechIndicatorCollector(BaseCollector):
         if macd:
             out.ta.macd(append=True)
 
-        output = IndicatorOutput(
+        output = TechIndicatorOutput(
             ticker=ticker,
             data=out.to_dict(orient="records"),
+            type="momentum",
             start=start,
             end=end,
             interval=interval,
@@ -167,7 +169,7 @@ class TechIndicatorCollector(BaseCollector):
         end: Optional[str] = None,
         interval: Optional[str] = None,
         return_dict: bool = False,
-    ) -> Union[IndicatorOutput, Dict[str, Any]]:
+    ) -> Union[TechIndicatorOutput, Dict[str, Any]]:
         """
         Compute volatility indicators such as Bollinger Bands and ATR.
 
@@ -178,7 +180,7 @@ class TechIndicatorCollector(BaseCollector):
             atr (int): ATR lookback period
 
         Returns:
-            output (Dict, IndicatorOutput): volatility indicators data.
+            output (Dict, TechIndicatorOutput): volatility indicators data.
         """
         out = TechIndicatorCollector._normalize_columns(df.copy())
 
@@ -192,11 +194,12 @@ class TechIndicatorCollector(BaseCollector):
         out.ta.bbands(length=bb_window, std=bb_std, append=True)
         out.ta.atr(length=atr, append=True)
 
-        output = IndicatorOutput(
+        output = TechIndicatorOutput(
             ticker=ticker,
             data=out.to_dict(orient="records"),
             start=start,
             end=end,
+            type="volatility",
             interval=interval,
         )
 
@@ -212,7 +215,7 @@ class TechIndicatorCollector(BaseCollector):
         end: Optional[str] = None,
         interval: Optional[str] = None,
         return_dict: bool = False,
-    ) -> Union[IndicatorOutput, Dict[str, Any]]:
+    ) -> Union[TechIndicatorOutput, Dict[str, Any]]:
         """
         Compute volume-based indicators such as OBV and Volume Moving Average.
 
@@ -222,7 +225,7 @@ class TechIndicatorCollector(BaseCollector):
             vma (int): Volume moving average window size
 
         Returns:
-            output (Dict, IndicatorOutput): volume indicators data.
+            output (Dict, TechIndicatorOutput): volume indicators data.
         """
         out = TechIndicatorCollector._normalize_columns(df.copy())
 
@@ -237,9 +240,10 @@ class TechIndicatorCollector(BaseCollector):
 
         out.ta.sma(close="volume", length=vma, append=True)
 
-        output = IndicatorOutput(
+        output = TechIndicatorOutput(
             ticker=ticker,
             data=out.to_dict(orient="records"),
+            type="volume",
             start=start,
             end=end,
             interval=interval,
