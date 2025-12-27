@@ -1,10 +1,10 @@
 from .ohlcv_output import OHLCVOutput
-from .indicator_output import IndicatorOutput
+from .tech_indicator_output import TechIndicatorOutput
 from .short_output import USShortOutput, KRShortOutput
 
 __all__ = [
     'OHLCVOutput',
-    'IndicatorOutput',
+    'TechIndicatorOutput',
     'USShortOutput',
     'KRShortOutput',
 ]

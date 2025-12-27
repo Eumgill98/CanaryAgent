@@ -4,7 +4,7 @@ from typing import Optional, Dict
 
 from canary_agent.core.base import BaseMarketOutput
 
-class IndicatorOutput(BaseMarketOutput):
+class TechIndicatorOutput(BaseMarketOutput):
     data: Dict = Field(...)
 
     # time setting

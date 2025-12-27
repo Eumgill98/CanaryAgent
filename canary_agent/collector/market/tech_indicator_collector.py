@@ -10,7 +10,7 @@ class InsufficientDataError(ValueError):
     pass
 
 
-class IndicatorCollector(BaseCollector):
+class TechIndicatorCollector(BaseCollector):
     """
     Collector responsible for computing derivative variables and
     technical indicators from OHLCV time-series data.
@@ -82,10 +82,10 @@ class IndicatorCollector(BaseCollector):
         Returns:
             output (Dict, IndicatorOutput): trend indicators data.
         """
-        out = IndicatorCollector._normalize_columns(df.copy())
+        out = TechIndicatorCollector._normalize_columns(df.copy())
 
         min_required = max(sma + ema)
-        IndicatorCollector._validate_min_rows(
+        TechIndicatorCollector._validate_min_rows(
             out,
             min_required,
             "Trend indicators (SMA/EMA)",
@@ -129,13 +129,13 @@ class IndicatorCollector(BaseCollector):
         Returns:
             output (Dict, IndicatorOutput): momentum indicators data.
         """
-        out = IndicatorCollector._normalize_columns(df.copy())
+        out = TechIndicatorCollector._normalize_columns(df.copy())
 
         min_required = rsi + 1
         if macd:
             min_required = max(min_required, 26)
 
-        IndicatorCollector._validate_min_rows(
+        TechIndicatorCollector._validate_min_rows(
             out,
             min_required,
             "Momentum indicators (RSI/MACD)",
@@ -180,10 +180,10 @@ class IndicatorCollector(BaseCollector):
         Returns:
             output (Dict, IndicatorOutput): volatility indicators data.
         """
-        out = IndicatorCollector._normalize_columns(df.copy())
+        out = TechIndicatorCollector._normalize_columns(df.copy())
 
         min_required = max(bb_window, atr)
-        IndicatorCollector._validate_min_rows(
+        TechIndicatorCollector._validate_min_rows(
             out,
             min_required,
             "Volatility indicators (BBANDS/ATR)",
@@ -224,9 +224,9 @@ class IndicatorCollector(BaseCollector):
         Returns:
             output (Dict, IndicatorOutput): volume indicators data.
         """
-        out = IndicatorCollector._normalize_columns(df.copy())
+        out = TechIndicatorCollector._normalize_columns(df.copy())
 
-        IndicatorCollector._validate_min_rows(
+        TechIndicatorCollector._validate_min_rows(
             out,
             vma,
             "Volume indicators (OBV/VMA)",
