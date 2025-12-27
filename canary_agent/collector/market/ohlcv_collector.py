@@ -1,6 +1,6 @@
 import yfinance as yf
 
-from typing import Dict, List, Union
+from typing import Dict, List, Union, Any
 
 from canary_agent.core.base import BaseCollector
 from canary_agent.collector.market.output import OHLCVOutput
@@ -36,7 +36,10 @@ class OHLCVCollector(BaseCollector):
     def support_interval(self) -> List[str]:
         return self._support_interval
 
-    def latest(self, return_dict: bool = True) -> Union[OHLCVOutput, Dict]:
+    def latest(
+        self, 
+        return_dict: bool = False
+    ) -> Union[Dict[str, Any], OHLCVOutput]:
         """
         Methods for collecting the latest OHLCV data.
 
@@ -58,11 +61,12 @@ class OHLCVCollector(BaseCollector):
 
         df.index.name = "date"
         latest_df = df.tail(1).reset_index()
+        out = df.iloc[-1]
 
         output = OHLCVOutput(
             ticker=self.ticker,
             type="latest",
-            data=latest_df.to_dict(orient="records"),
+            data=out.to_dict(),
         )
 
         return output.to_dict() if return_dict else output
@@ -72,8 +76,8 @@ class OHLCVCollector(BaseCollector):
         start: str,
         end: str,
         interval: str = "1d",
-        return_dict: bool = True,
-    ) ->  Union[OHLCVOutput, Dict]:
+        return_dict: bool = False,
+    ) ->  Union[Dict[str, Any], OHLCVOutput]:
         """
         Method to collect OHLCV data between start and end.
         

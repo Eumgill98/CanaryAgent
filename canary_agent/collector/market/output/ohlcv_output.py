@@ -1,10 +1,10 @@
 from pydantic import Field
-from typing import Optional, Dict
+from typing import Optional, Dict, List, Any, Union
 
 from canary_agent.core.base import BaseMarketOutput
 
 class OHLCVOutput(BaseMarketOutput):
-    data: Dict = Field(...)
+    data: Union[Dict[str, Any], List[Dict[str, Any]]] = Field(...)
     type: str = Field(...)
 
     # time setting

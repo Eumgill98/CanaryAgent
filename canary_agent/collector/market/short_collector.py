@@ -1,7 +1,7 @@
 import yfinance as yf
 from pykrx import stock
 
-from typing import Union, Dict
+from typing import Union, Dict, Any
 
 from canary_agent.core.base import BaseCollector
 from canary_agent.collector.market.output import USShortOutput, KRShortOutput
@@ -20,8 +20,8 @@ class USShortCollector(BaseCollector):
     
     def latest(
         self,
-        return_dict: bool = True
-    ) -> Union[Dict, USShortOutput]:
+        return_dict: bool = False,
+    ) -> Union[Dict[str, Any], USShortOutput]:
         """
         Method to collect recently US stock ticker short selling information
         """
@@ -57,8 +57,8 @@ class KRShortCollector(BaseCollector):
     
     def latest(
         self,
-        return_dict: bool = True,
-    ) -> Union[Dict, KRShortOutput]:
+        return_dict: bool = False,
+    ) -> Union[Dict[str, Any], KRShortOutput]:
         """
         Method to collect recently Korea short ticker selling information
         """
@@ -112,8 +112,8 @@ class KRShortCollector(BaseCollector):
         self,
         start: str,
         end: str,
-        return_dict: bool = True,
-    ) -> Union[Dict, KRShortOutput]:
+        return_dict: bool = False,
+    ) ->  Union[Dict[str, Any], KRShortOutput]:
         """
         Method to collect Korea short ticker selling information between.
         """

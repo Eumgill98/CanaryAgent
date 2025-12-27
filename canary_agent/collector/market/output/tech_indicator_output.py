@@ -1,11 +1,10 @@
-
 from pydantic import Field
-from typing import Optional, Dict
+from typing import Optional, Dict, List, Any
 
 from canary_agent.core.base import BaseMarketOutput
 
 class TechIndicatorOutput(BaseMarketOutput):
-    data: Dict = Field(...)
+    data: List[Dict[str, Any]] = Field(...)
 
     # time setting
     start: Optional[str] = Field(default=None)

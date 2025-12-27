@@ -1,6 +1,6 @@
 import pandas as pd
 import pandas_ta as ta
-from typing import Dict, List, Optional, Union
+from typing import Dict, List, Optional, Union, Any
 
 from canary_agent.core.base import BaseCollector
 from canary_agent.collector.market.output import IndicatorOutput
@@ -69,8 +69,8 @@ class TechIndicatorCollector(BaseCollector):
         start: Optional[str] = None,
         end: Optional[str] = None,
         interval: Optional[str] = None,
-        return_dict: bool = True,
-    ) -> Union[IndicatorOutput, Dict]:
+        return_dict: bool = False,
+    ) -> Union[IndicatorOutput, Dict[str, Any]]:
         """
         Compute trend indicators such as SMA and EMA.
 
@@ -116,8 +116,8 @@ class TechIndicatorCollector(BaseCollector):
         start: Optional[str] = None,
         end: Optional[str] = None,
         interval: Optional[str] = None,
-        return_dict: bool = True,
-    ) -> Union[Dict, IndicatorOutput]:
+        return_dict: bool = False,
+    ) -> Union[IndicatorOutput, Dict[str, Any]]:
         """
         Compute momentum indicators such as RSI and MACD.
 
@@ -166,8 +166,8 @@ class TechIndicatorCollector(BaseCollector):
         start: Optional[str] = None,
         end: Optional[str] = None,
         interval: Optional[str] = None,
-        return_dict: bool = True,
-    ) -> Union[Dict, IndicatorOutput]:
+        return_dict: bool = False,
+    ) -> Union[IndicatorOutput, Dict[str, Any]]:
         """
         Compute volatility indicators such as Bollinger Bands and ATR.
 
@@ -211,8 +211,8 @@ class TechIndicatorCollector(BaseCollector):
         start: Optional[str] = None,
         end: Optional[str] = None,
         interval: Optional[str] = None,
-        return_dict: bool = True,
-    ) -> Union[Dict, IndicatorOutput]:
+        return_dict: bool = False,
+    ) -> Union[IndicatorOutput, Dict[str, Any]]:
         """
         Compute volume-based indicators such as OBV and Volume Moving Average.
 
